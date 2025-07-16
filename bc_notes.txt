@@ -1,0 +1,40 @@
+DATA MODEL
+
+coffee_transaction_summary (transaction_id, transaction_date, employee_id, transaction_amount)
+coffee_transaction_detail (transaction_id, transaction_detail_id, product_id, product_name, product_price, purchaser_id, debtor_id, transaction_date)
+coffee_product_dim (product_name, product_id, product_price, update_date)
+employee_dim (employee_name, employee_id, product_id, update_date, is_absent)
+coffee_general_ledger_balances (employee_id, balance, update_date)
+
+
+
+
+CREATE SCHEMA IF NOT EXISTS BEAN_COUNTER
+    AUTHORIZATION alexnikas;
+
+Left top banner: next recommended purchaser: {employee}
+Left bottom table: transaction log, can click for detail, search bar
+Right banner:
+Top who paid today? (Add coffee transaction)
+Current order list
+Select absences
+Update prices (prices are up to do / prices updated)
+Add new team member
+
+{
+  "purchaser_id": 1,
+  "purchases": [
+    {
+      "debtor_id": 1,
+      "product_id": 1
+    },
+    {
+      "debtor_id": 2,
+      "product_id": 1
+    },
+    {
+      "debtor_id": 3,
+      "product_id": 3
+    }
+  ]
+}
