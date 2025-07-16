@@ -211,3 +211,6 @@ bc_env/
 
 ## notes
 bc_notes.txt
+
+## ds store
+.DS_Store
