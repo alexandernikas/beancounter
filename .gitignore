@@ -214,3 +214,5 @@ bc_notes.txt
 
 ## ds store
 .DS_Store
+__pycache__/
+
