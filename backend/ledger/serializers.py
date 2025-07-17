@@ -8,6 +8,8 @@ from .models import (
 )
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.product_name', read_only=True)
+
     class Meta:
         model = EmployeeDim
         fields = '__all__'
@@ -20,6 +22,8 @@ class CoffeeProductSerializer(serializers.ModelSerializer):
 
 
 class TransactionSummarySerializer(serializers.ModelSerializer):
+    purchaser_name = serializers.CharField(source='employee.employee_name', read_only=True)
+
     class Meta:
         model = CoffeeTransactionSummary
         fields = '__all__'
