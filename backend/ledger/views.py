@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
-from .services import create_coffee_transaction, get_employee_with_lowest_balance
+from .services import create_coffee_transaction, get_employee_with_lowest_balance, update_employee_absences
 
 class EmployeeViewSet(viewsets.ModelViewSet):
-    queryset = EmployeeDim.objects.all()
+    queryset = EmployeeDim.objects.all().order_by('employee_id')
     serializer_class = EmployeeSerializer
 
 
@@ -18,7 +18,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class TransactionSummaryViewSet(viewsets.ModelViewSet):
-    queryset = CoffeeTransactionSummary.objects.all()
+    queryset = CoffeeTransactionSummary.objects.all().order_by('-transaction_id')
     serializer_class = TransactionSummarySerializer
 
 
@@ -56,4 +56,14 @@ class SuggestBuyerView(APIView):
             "suggested_purchaser_id": suggested.employee_id,
             "name": suggested.employee_name
         })
+
+class UpdateEmployeeAbsencesView(APIView):
+    def post(self, request):
+        absent_ids = request.data.get('absent_employee_ids', [])
+
+        if not isinstance(absent_ids, list):
+            return Response({'error': 'Invalid format'}, status=status.HTTP_400_BAD_REQUEST)
+
+        update_employee_absences(absent_ids)
+        return Response({'message': 'Employee absences updated.'}, status=status.HTTP_200_OK)
 

@@ -9,6 +9,19 @@ from django.utils import timezone
 from decimal import Decimal
 from django.db import transaction, models
 
+def update_employee_absences(absent_employee_ids):
+    print(absent_employee_ids)
+    """
+    *** accepted format ***
+    {
+        "absent_employee_ids": [101, 102, 103]
+    }
+    """
+    # clears absences
+    EmployeeDim.objects.update(is_absent=False)
+
+    # marks employees ticked as OOO on the front end as absent
+    EmployeeDim.objects.filter(employee_id__in=absent_employee_ids).update(is_absent=True)
 
 def get_employee_with_lowest_balance():
     ## returns employee with lowest ledger balance next purchaser recommendation
