@@ -26,14 +26,13 @@ def update_employee_absences(absent_employee_ids):
 def get_employee_with_lowest_balance():
     ## returns employee with lowest ledger balance next purchaser recommendation
     return (
-        CoffeeGeneralLedgerBalances.objects.select_related('employee')
+        CoffeeGeneralLedgerBalances.objects
+        .filter(employee__current_employee=True)
+        .select_related('employee')
         .order_by('balance')
         .first()
         .employee
     )
-
-# def check_for_absence(employee_id: int) -> bool:
-#     return is_absent
 
 ## transaction.atomic decorator to ensure that the multi-step record entry is processed as single unit
 @transaction.atomic
@@ -96,10 +95,66 @@ def create_coffee_transaction(purchaser_id: int, purchases: list[dict]):
         # updates ledger balances
         ## models.F() allows program to modify a model field directly in query
         CoffeeGeneralLedgerBalances.objects.filter(employee=debtor).update(
-            balance=models.F('balance') - product.product_price
+            balance=models.F('balance') - product.product_price,
+            update_date=timezone.now().date()
         )
+
         CoffeeGeneralLedgerBalances.objects.filter(employee=purchaser).update(
-            balance=models.F('balance') + product.product_price
+            balance=models.F('balance') + product.product_price,
+            update_date=timezone.now().date()
         )
 
     return summary
+
+
+def process_employee_changes(employee_list):
+    created = []
+    updated = []
+
+    with transaction.atomic():
+        for emp in employee_list:
+            emp_id = emp.get('employee_id')
+            name = emp.get('employee_name')
+            product_id = emp.get('product')
+
+            if not name or not product_id:
+                continue  # skip incomplete rows
+
+            if emp_id is None:
+                # our new employee
+                e = EmployeeDim.objects.create(employee_name=name, product_id=product_id)
+                created.append(e.employee_id)
+
+                # creates zero balance for new employee
+                CoffeeGeneralLedgerBalances.objects.create(
+                    employee=e,
+                    balance=0  # or use the appropriate field name like `amount=0`
+                )
+
+            else:
+                ## update existing employee record
+                try:
+                    e = EmployeeDim.objects.get(employee_id=emp_id)
+                    e.employee_name = name
+                    e.product_id = product_id
+                    e.save()
+                    updated.append(emp_id)
+                except EmployeeDim.DoesNotExist:
+                    continue
+
+    return {
+        "created_ids": created,
+        "updated_ids": updated,
+        "status": "success"
+    }
+
+def delete_employee(employee_id):
+    """
+    Deletes an employee and their associated records
+    """
+    try:
+        employee = EmployeeDim.objects.get(employee_id=employee_id)
+        employee.delete()
+        return {"status": "success", "message": "Employee deleted successfully."}
+    except EmployeeDim.DoesNotExist:
+        return {"status": "error", "message": "Employee not found."}

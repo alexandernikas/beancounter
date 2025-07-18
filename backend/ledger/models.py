@@ -9,6 +9,7 @@ class EmployeeDim(models.Model):
     product = models.ForeignKey('CoffeeProductDim', on_delete=models.SET_NULL, null=True, blank=True)
     update_date = models.DateField(auto_now=True)
     is_absent = models.BooleanField(default=False)
+    current_employee = models.BooleanField(default=True)
 
     def __str__(self):
         return self.employee_name

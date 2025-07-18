@@ -16,34 +16,30 @@
           <span class="suggestion-note">Based on purchase history</span>
         </div>
   
-        <!-- Transaction Table -->
+            <!-- Transaction Table -->
         <div class="transaction-list">
-          <h2 class="table-banner">Previous Coffee Runs</h2>
-          <div class="table-container">
-            <div class="table-header">
-              <table class="transaction-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Purchaser</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            <div class="table-body-container">
-              <table class="transaction-table">
-                <tbody>
-                  <tr v-for="txn in transactions" :key="txn.id">
-                    <td>{{ txn.transaction_date }}</td>
-                    <td>{{ txn.purchaser_name }}</td>
-                    <td>${{ txn.transaction_amount }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <h2 class="table-banner">Previous Coffee Runs</h2>
+        <div class="table-container">
+            <table class="transaction-table">
+            <thead>
+                <tr>
+                <th>Date</th>
+                <th>Purchaser</th>
+                <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody class="table-body-scroll">
+                <tr v-for="txn in transactions" :key="txn.id">
+                <td>{{ txn.transaction_date }}</td>
+                <td>{{ txn.purchaser_name }}</td>
+                <td>${{ txn.transaction_amount }}</td>
+                </tr>
+            </tbody>
+            </table>
         </div>
+        </div>
+
+        
       </main>
     </div>
   </template>
@@ -159,73 +155,70 @@
   }
   
   .table-container {
-    border-radius: 8px;
-    border: 1px solid #555;
-    background-color: #4b4848;
-    overflow: hidden;
-  }
-  
-  .table-header {
-    background-color: #2e2e2e;
-    border-bottom: 1px solid #555;
-  }
-  
-  .table-body-container {
-    max-height: 340px;
-    overflow-y: auto;
-  }
-  
-  .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #4b4848;
-    text-align: left;
-  }
-  
-  .transaction-table th,
-  .transaction-table td {
-    padding: 12px;
-    border-bottom: 1px solid #555;
-  }
-  
-  .transaction-table th {
-    background-color: #2e2e2e;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .transaction-table tbody tr:hover {
-    background-color: #cfcfcf;
-    color: black;
-  }
-  
-  .transaction-table tbody tr:nth-child(even) {
-    background-color: #717070;
-  }
-  
-  .transaction-table tbody tr:nth-child(even):hover {
-    background-color: #cfcfcf;
-    color: black;
-  }
-  
-  /* Scrollbar styling for webkit browsers */
-  .table-body-container::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .table-body-container::-webkit-scrollbar-track {
-    background: #919191;
-    border-radius: 4px;
-  }
-  
-  .table-body-container::-webkit-scrollbar-thumb {
-    background: #4f698a;
-    border-radius: 4px;
-  }
-  
-  .table-body-container::-webkit-scrollbar-thumb:hover {
-    background: #666;
-  }
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #4b4848;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #4b4848;
+  table-layout: fixed;
+}
+
+.transaction-table th,
+.transaction-table td {
+  padding: 12px;
+  border-bottom: 1px solid #555;
+  text-align: left;
+  min-width: 100px;
+}
+
+.transaction-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #2e2e2e;
+  color: white;
+  z-index: 1;
+}
+
+/* Zebra striping and hover effects */
+.transaction-table tbody tr:hover {
+  background-color: #cfcfcf;
+  color: black;
+}
+
+.transaction-table tbody tr:nth-child(even) {
+  background-color: #717070;
+}
+
+.transaction-table tbody tr:nth-child(even):hover {
+  background-color: #cfcfcf;
+  color: black;
+}
+
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #919191;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #4f698a;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #465d7a;
+}
+
   
   .coffee-icon {
     height: 20px;

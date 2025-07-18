@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
-from .services import create_coffee_transaction, get_employee_with_lowest_balance, update_employee_absences
+from .services import * ## create_coffee_transaction, get_employee_with_lowest_balance, update_employee_absences
 
 class EmployeeViewSet(viewsets.ModelViewSet):
-    queryset = EmployeeDim.objects.all().order_by('employee_id')
+    queryset = EmployeeDim.objects.filter(current_employee=True).order_by('employee_id')
     serializer_class = EmployeeSerializer
 
 
@@ -57,6 +57,7 @@ class SuggestBuyerView(APIView):
             "name": suggested.employee_name
         })
 
+## post method to handle OOO
 class UpdateEmployeeAbsencesView(APIView):
     def post(self, request):
         absent_ids = request.data.get('absent_employee_ids', [])
@@ -66,4 +67,35 @@ class UpdateEmployeeAbsencesView(APIView):
 
         update_employee_absences(absent_ids)
         return Response({'message': 'Employee absences updated.'}, status=status.HTTP_200_OK)
+
+## handles update + create employee records
+class SaveBulkEmployeesView(APIView):
+    def post(self, request):
+        employees = request.data.get('employees', [])
+        try:
+            result = process_employee_changes(employees)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+## this does not actually delete an employee record, but sets the current_employee field to false
+class DeleteEmployeeView(APIView):
+    def post(self, request):
+        print("*** deleting employee ***")
+        employee_id = request.data.get('employee_id')
+        if not employee_id:
+            return Response({"error": "employee_id is required"}, status=400)
+
+        try:
+            employee = EmployeeDim.objects.get(employee_id=employee_id)
+            employee.current_employee = False
+            employee.save()
+
+            #set balance to 0 or archive related records here if needed
+            CoffeeGeneralLedgerBalances.objects.filter(employee=employee).delete()
+
+            return Response({"message": f"Employee {employee_id} marked as inactive."}, status=200)
+        except EmployeeDim.DoesNotExist:
+            return Response({"error": "Employee not found"}, status=404)
+
 

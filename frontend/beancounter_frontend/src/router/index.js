@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../components/Dashboard.vue';
+import ManageTeam from '../components/ManageTeam.vue';
 
 const routes = [
-  { path: '/',
+  { path: '/home',
     name: 'Dashboard',
     component: Dashboard },
+  { path: '/manage-team',
+    name: ManageTeam,
+    component: ManageTeam }
 ];
 
 const router = createRouter({

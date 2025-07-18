@@ -11,7 +11,7 @@
         <h3>Enter Coffee Run</h3>
         <div class="form-group">
           <label for="purchaser">Purchaser:</label>
-          <select id="purchaser" v-model="selectedPurchaser" class="purchaser-dropdown">
+          <select id="purchaser" v-model="selectedPurchaser" class="style-dropdown">
             <option value="">Select purchaser...</option>
             <option v-for="employee in employeeOrders" :key="employee.employee_id" :value="employee.employee_id">
               {{ employee.employee_name }}
@@ -19,7 +19,7 @@
           </select>
         </div>
         <div class="sidebar-buttons">
-          <button class="sidebar-btn" @click="submitAll">Submit</button>
+          <button class="style-btn" @click="submitAll">Submit</button>
         </div>
       </div>
       
@@ -50,8 +50,8 @@
           </tbody>
         </table>
         <div class="sidebar-buttons">
-          <button class="sidebar-btn" @click="manageCoffeeMenu">Manage Coffee Menu</button>
-          <button class="sidebar-btn" @click="manageTeamMembers">Manage Team Members</button>
+          <button class="style-btn" @click="manageCoffeeMenu">Manage Coffee Menu</button>
+          <button class="style-btn" @click="$router.push('/manage-team')">Manage Team Members</button>
         </div>
       </div>
     </aside>
@@ -108,7 +108,7 @@
             return;
         }
 
-        // Build purchases list
+        // build purchases list
         const purchases = presentEmployees.map(emp => ({
             debtor_id: emp.employee_id,
             product_id: emp.product
@@ -163,7 +163,7 @@ async submitAll() {
   
   <style scoped>
   .sidebar {
-    width: 375px;
+    width: 450px;
     background-color: #2c2c2c;
     padding: 0;
     border-right: 1px solid #444;
@@ -180,7 +180,7 @@ async submitAll() {
   
   .sidebar-header h1 {
     margin: 0;
-    font-size: 1.4em;
+    font-size: 2.4em;
     color: #fff;
     display: flex;
     align-items: center;
@@ -248,45 +248,6 @@ async submitAll() {
     font-size: 0.9em;
   }
   
-  .purchaser-dropdown {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #666;
-    border-radius: 6px;
-    background-color: #4b4848;
-    color: white;
-    font-size: 0.9em;
-  }
+
   
-  .purchaser-dropdown:focus {
-    outline: none;
-    border-color: #888;
-    background-color: #5a5757;
-  }
-  
-  .sidebar-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .sidebar-btn {
-    background-color: #4b4848;
-    color: white;
-    border: 1px solid #666;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s;
-  }
-  
-  .sidebar-btn:hover {
-    background-color: #5a5757;
-  }
-  
-  .sidebar-btn:active {
-    background-color: #3a3a3a;
-  }
   </style>
