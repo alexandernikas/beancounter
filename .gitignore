@@ -302,3 +302,7 @@ dist
 .out
 .storybook-out
 
+# Django migrations
+**/migrations/
+!**/migrations/__init__.py
+
