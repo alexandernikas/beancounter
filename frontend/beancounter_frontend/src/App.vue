@@ -42,4 +42,45 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.style-btn {
+    background-color: #4b4848;
+    color: white;
+    border: 1px solid #666;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+  }
+  
+  .style-btn:hover {
+    background-color: #5a5757;
+  }
+  
+  .style-btn:active {
+    background-color: #3a3a3a;
+  }
+  .sidebar-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .style-dropdown {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #666;
+    border-radius: 6px;
+    background-color: #4b4848;
+    color: white;
+    font-size: 0.9em;
+  }
+  
+  .style-dropdown:focus {
+    outline: none;
+    border-color: #888;
+    background-color: #5a5757;
+  }
+  
 </style>
