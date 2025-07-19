@@ -60,3 +60,5 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./backend
+          startup-command: 'gunicorn ledger.wsgi --bind=0.0.0.0 --timeout 600'
+
