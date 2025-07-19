@@ -33,26 +33,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Debug environment variables
-        run: |
-          echo "DB_NAME=$DB_NAME"
-          echo "DB_USER=$DB_USER"
-          echo "DB_PASSWORD=$DB_PASSWORD"
-          echo "DB_HOST=$DB_HOST"
-          echo "DB_PORT=$DB_PORT"
-          echo "ALLOWED_HOSTS=$ALLOWED_HOSTS"
-          echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS"
-          ping -c 3 $DB_HOST || echo "Cannot resolve DB_HOST"
+      # - name: Debug environment variables
+      #   run: |
+      #     echo "DB_NAME=$DB_NAME"
+      #     echo "DB_USER=$DB_USER"
+      #     echo "DB_PASSWORD=$DB_PASSWORD"
+      #     echo "DB_HOST=$DB_HOST"
+      #     echo "DB_PORT=$DB_PORT"
+      #     echo "ALLOWED_HOSTS=$ALLOWED_HOSTS"
+      #     echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS"
+      #     ping -c 3 $DB_HOST || echo "Cannot resolve DB_HOST"
 
-      - name: Run migrations
-        working-directory: ./backend
-        run: |
-          python manage.py migrate
+      # - name: Run migrations
+      #   working-directory: ./backend
+      #   run: |
+      #     python manage.py migrate
 
-      - name: Collect static files
-        working-directory: ./backend
-        run: |
-          python manage.py collectstatic --noinput
+      # - name: Collect static files
+      #   working-directory: ./backend
+      #   run: |
+      #     python manage.py collectstatic --noinput
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
