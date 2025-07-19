@@ -50,7 +50,7 @@
           </tbody>
         </table>
         <div class="sidebar-buttons">
-          <button class="style-btn" @click="manageCoffeeMenu">Manage Coffee Menu</button>
+          <button class="style-btn" @click="$router.push('/manage-coffee-menu')">Manage Coffee Menu</button>
           <button class="style-btn" @click="$router.push('/manage-team')">Manage Team Members</button>
         </div>
       </div>
