@@ -149,14 +149,6 @@ async submitAll() {
   }
 },
 
-
-
-      manageCoffeeMenu() {
-        this.$emit('manage-coffee-menu');
-      },
-      manageTeamMembers() {
-        this.$emit('manage-team-members');
-      }
     }
   };
   </script>

@@ -15,6 +15,8 @@ from .UserAgent import NewUserAgent
 from datetime import date
 import re
 import requests
+from decimal import Decimal
+
 
 
 def update_employee_absences(absent_employee_ids):
@@ -234,16 +236,46 @@ def scrape_vento_menu():
 
         sizes = [s.text.strip() for s in sibling.select("div.table-size span.item-size")]
         prices = [p.text.strip() for p in sibling.select("div.table-price span.item-price")]
-
-        # Match size to price
-        size_price_map = list(zip(sizes, prices))
-
-
-        menu_items.append({
-            "name": name,
-            "sizes_prices": size_price_map,
-        })
-    print(menu_items)
+        if len(sizes) != len(prices):
+            print(f"Size and price mismatch for item: {name}")
+            return None
+        else:
+            for i in range(0,len(sizes)):
+                size = sizes[i].replace(" OZ", "oz")
+                product_name = name + " " + size
+                product_price = prices[i]
+                menu_items.append({
+                    "product_name": product_name,
+                    "product_price": product_price
+                })
     return menu_items
+
+def sync_scraped_products(scraped_data):
+    updated = 0
+    created = 0
+    print("Syncing scraped products...")
+    with transaction.atomic():
+        for item in scraped_data:
+            name = item['product_name']
+            if item['product_price'] == '':
+                print(f"Skipping product {name} due to missing price")
+                continue
+            
+            else:
+                price = Decimal(item['product_price']).quantize(Decimal("0.01"))             
+                product, created_flag = CoffeeProductDim.objects.get_or_create(
+                    product_name=name,
+                    defaults={"product_price": price}
+                )
+
+                if created_flag:
+                    created += 1
+                elif product.product_price != price:
+                    product.product_price = price
+                    product.save(update_fields=["product_price"])
+                    updated += 1
+
+    return { "updated" : updated, "created": created }
+
 
 
