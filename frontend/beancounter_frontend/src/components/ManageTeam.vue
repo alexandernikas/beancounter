@@ -2,8 +2,10 @@
     <div class="detail-container">
 
         <main class="main-content">
-            <h2>Manage Team Members</h2>
+          <span class="exit-btn" @click="$router.push('/home')" > ✕ </span>
 
+            <h2>Manage Team Members</h2>
+ 
     <div class="mgmt-card">  
       <table class="employee-table">
         <thead>
@@ -93,7 +95,7 @@ export default {
             const res = await axios.post('http://localhost:8000/api/save_bulk_employees/', {
             employees: this.employees
             });
-            alert('Changes saved!');
+            alert('Changes saved');
             this.$router.push('/home'); // redirect to home page
 
             await this.fetchEmployees(); // refresh after save
@@ -128,8 +130,12 @@ export default {
   }
   .employee-table td {
   padding-right:20px;
-  padding-bottom:5px;
+  padding-bottom:7px;
+  border-top: 1px solid rgb(176, 176, 176);
+  padding-top:7px;
 }
+
+
 .employee-table td button {
   color: red; /* or any color you want */
   background: rgba(255, 0, 0, 0.093);
@@ -151,7 +157,7 @@ export default {
   .main-content {
     flex: 1;
     padding: 20px;
-    max-width: 1000px;
+    max-width: 500px;
     margin: 0 auto;
 
   }
@@ -173,5 +179,6 @@ export default {
   background-color: red;
   color: white;
 }
+
 
 </style>

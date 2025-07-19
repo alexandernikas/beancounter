@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody class="table-body-scroll">
-                <tr v-for="txn in transactions" :key="txn.id">
+                <tr v-for="txn in transactions" :key="txn.transaction_id" @click="goToTransaction(txn.transaction_id)">
                 <td>{{ txn.transaction_date }}</td>
                 <td>{{ txn.purchaser_name }}</td>
                 <td>${{ txn.transaction_amount }}</td>
@@ -65,6 +65,8 @@
         try {
           const response = await axios.get('http://localhost:8000/api/summaries/');
           this.transactions = response.data;
+          console.log('fetched transactions', this.transactions);
+
         } catch (error) {
           console.error("Error fetching transactions:", error);
         }
@@ -92,18 +94,9 @@
         await this.fetchTransactions(); 
         await this.fetchSuggestedBuyer();  
       },
-  
-      handleSubmitCoffeeRun(data) {
-        console.log('Coffee run submitted:', data);
-      },
-  
-      handleManageCoffeeMenu() {
-        console.log('Manage coffee menu clicked');
-      },
-  
-      handleManageTeamMembers() {
-        console.log('Manage team members clicked');
-      }
+        goToTransaction(transaction_id) {
+            this.$router.push({ name: 'TransactionDetail', params: { transaction_id } });
+        }
     },
   
     async created() {

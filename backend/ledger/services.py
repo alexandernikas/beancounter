@@ -24,15 +24,19 @@ def update_employee_absences(absent_employee_ids):
     EmployeeDim.objects.filter(employee_id__in=absent_employee_ids).update(is_absent=True)
 
 def get_employee_with_lowest_balance():
-    ## returns employee with lowest ledger balance next purchaser recommendation
-    return (
+    lowest_balance_record = (
         CoffeeGeneralLedgerBalances.objects
         .filter(employee__current_employee=True)
         .select_related('employee')
         .order_by('balance')
         .first()
-        .employee
     )
+
+    if lowest_balance_record is not None:
+        return lowest_balance_record.employee
+    else:
+        return None
+
 
 ## transaction.atomic decorator to ensure that the multi-step record entry is processed as single unit
 @transaction.atomic
@@ -148,13 +152,41 @@ def process_employee_changes(employee_list):
         "status": "success"
     }
 
-def delete_employee(employee_id):
-    """
-    Deletes an employee and their associated records
-    """
+
+def rollback_transaction(transaction_id):
     try:
-        employee = EmployeeDim.objects.get(employee_id=employee_id)
-        employee.delete()
-        return {"status": "success", "message": "Employee deleted successfully."}
-    except EmployeeDim.DoesNotExist:
-        return {"status": "error", "message": "Employee not found."}
+        with transaction.atomic():
+            ## retrieves transaction_detail records assoicated with transaction_id
+            details = CoffeeTransactionDetail.objects.filter(transaction_id=transaction_id)
+
+            if not details.exists():
+                raise ValueError(f"No transaction details found for transaction_id={transaction_id}")
+
+            for detail in details:
+                # credit debtor balances
+
+                CoffeeGeneralLedgerBalances.objects.filter(employee=detail.debtor_id).update(
+                    balance=models.F('balance') + detail.product_price,
+                    update_date=timezone.now().date()
+                )
+                # debit purchaser balance
+                CoffeeGeneralLedgerBalances.objects.filter(employee=detail.purchaser_id).update(
+                    balance=models.F('balance') - detail.product_price,
+                    update_date=timezone.now().date()
+                )
+
+            # delete transaction detail records
+            details.delete()
+
+            # delete parent record
+            summary = CoffeeTransactionSummary.objects.get(pk=transaction_id)
+            summary.delete()
+
+            return {"status": "success", "message": f"Transaction {transaction_id} rolled back."}
+
+    except CoffeeTransactionSummary.DoesNotExist:
+        raise ValueError(f"Transaction summary with id={transaction_id} does not exist")
+    except Employee.DoesNotExist:
+        raise ValueError("One or more involved employees no longer exist")
+    except Exception as e:
+        raise e

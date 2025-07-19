@@ -30,6 +30,9 @@ class TransactionSummarySerializer(serializers.ModelSerializer):
 
 
 class TransactionDetailSerializer(serializers.ModelSerializer):
+    debtor_name = serializers.CharField(source='debtor.employee_name', read_only=True)
+    purchaser_name = serializers.CharField(source='purchaser.employee_name', read_only=True)
+    product_name = serializers.CharField(source='product.product_name', read_only=True)
     class Meta:
         model = CoffeeTransactionDetail
         fields = '__all__'
