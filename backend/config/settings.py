@@ -26,8 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
-
+ALLOWED_HOSTS = ['bean-counter-epfhg2h9gjeyedcs.eastus2-01.azurewebsites.net', 'localhost']
 
 # Application definition
 
