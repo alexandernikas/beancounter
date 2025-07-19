@@ -16,7 +16,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #000; /* Black background */
+  background-color: #1e1e1e; /* Black background */
   color: #dcdcdc;            /* White text */
 }
 #app {
@@ -25,7 +25,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   min-height: 100vh;
-  background-color: #000; /* Ensure root app container is black too */
+  background-color: #1e1e1e; /* Ensure root app container is black too */
   color: #fff;
 }
 
@@ -82,5 +82,15 @@ nav a.router-link-exact-active {
     border-color: #888;
     background-color: #5a5757;
   }
+  .exit-btn {
+  color: red; 
+  cursor: pointer; 
+  float: right; 
+  font-weight: bold; 
+  font-size: 1.5rem;
+}
+.exit-btn:hover {
+  color: rgb(201, 0, 0); 
+}
   
 </style>
