@@ -20,4 +20,6 @@ urlpatterns = [
     path('delete_employee/', DeleteEmployeeView.as_view(), name='delete_employee'),
     path('details/<int:transaction_id>/', TransactionDetailViewSet.as_view({'get': 'list'}), name='transaction-detail'),
     path('rollback_transaction/<int:transaction_id>/', RollbackTransactionView.as_view(), name='rollback_transaction'),
+    path('update_prices/', UpdatePricesView.as_view(), name='update-prices'),
+
 ]
