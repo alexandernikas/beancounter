@@ -138,6 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Allow Vue dev server
 CORS_ALLOWED_ORIGINS = [
-    config('ALLOWED_ORIGINS')
+    os.environ.get('ALLOWED_ORIGINS')
 ]
 
