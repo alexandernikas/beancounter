@@ -120,7 +120,9 @@ class RollbackTransactionView(APIView):
 class UpdatePricesView(APIView):
     def post(self, request):
         try:
-            result = scrape_vento_menu()
+            menu_data = scrape_vento_menu()
+            ## result formatted as { "updated": 5, "created": 2 }
+            result = sync_scraped_products(menu_data)
 
             return Response({"status": "success", "result": result}, status=status.HTTP_200_OK)
         except Exception as e:

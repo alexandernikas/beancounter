@@ -31,7 +31,9 @@
 
               <div class="sidebar-buttons">
             <button @click="updatePrices" class="style-btn">Update Prices</button>
-            <span class="suggestion-note">Prices updated from url.com</span>
+            <p v-if="resultMessage">{{ resultMessage }}</p>
+
+            <span class="suggestion-note">Prices retrieved from https://ventocoffee.com/ in compliance with user terms</span>
 
             </div>
             </div>
@@ -53,6 +55,7 @@
     data() {
       return {
         products: [],
+        resultMessage: ''
       };
     },
     async created() {
@@ -72,11 +75,29 @@
         console.log("Updating Prices");
         try {
           const response = await axios.post("http://localhost:8000/api/update_prices/");
-          console.log("Prices updated:", response.data);
+          const data = response.data;
+
+          if (data.status === "success") {
+            const updated = data.result.updated;
+            const created = data.result.created;
+
+            if (updated === 0 && created === 0) {
+              alert('Prices are up to date');
+            } else {
+              alert(`Updated ${updated} item(s), created ${created} new item(s)`);
+            }
+            await this.fetchProducts();
+
+          } else {
+            this.resultMessage = `Error: ${data.message}`;
+          }
+
         } catch (error) {
           console.error("Error updating prices:", error);
+          alert('Failed to update prices');
         }
       }
+
   
     }
   };
@@ -103,7 +124,7 @@
     .main-content {
       flex: 1;
       padding: 20px;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
     }
     .product-detail-list {
