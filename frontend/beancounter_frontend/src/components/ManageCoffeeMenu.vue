@@ -20,7 +20,7 @@
                     </tr>
                   </thead>
                   <tbody class="table-body-scroll">
-                    <tr v-for="product in products" :key="product.product_id">
+                    <tr v-for="product in filteredProducts" :key="product.product_id">
                       <td>{{ product.product_name }}</td>
                       <td>{{ product.product_price }}</td>
                       <td>{{ product.update_date }}</td>
@@ -30,6 +30,12 @@
               </div>
 
               <div class="sidebar-buttons">
+                <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search menu..."
+      class="search-box"
+    />
             <button @click="updatePrices" class="style-btn">Update Prices</button>
             <p v-if="resultMessage">{{ resultMessage }}</p>
 
@@ -55,9 +61,17 @@
     data() {
       return {
         products: [],
-        resultMessage: ''
+        resultMessage: '',
+        searchQuery: ''
       };
     },
+    computed: {
+    filteredProducts() {
+      return this.products.filter(product =>
+        product.product_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
     async created() {
       await this.fetchProducts();
     },
@@ -196,4 +210,11 @@
   .table-container::-webkit-scrollbar-thumb:hover {
       background: #465d7a;
   }
+  .search-box {
+  background-color: #545454;
+    color: white;
+    border: 1px solid #555;
+    padding: 6px;
+    border-radius: 4px;
+}
   </style>

@@ -15,7 +15,7 @@ from .UserAgent import NewUserAgent
 from datetime import date
 import re
 import requests
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 
 
@@ -46,6 +46,11 @@ def get_employee_with_lowest_balance():
         return lowest_balance_record.employee
     else:
         return None
+
+##  tax converions
+def taxed(price):
+    TAX_RATE = Decimal('1.0815')  # convert float to Decimal
+    return (price * TAX_RATE).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
 ## transaction.atomic decorator to ensure that the multi-step record entry is processed as single unit
@@ -82,7 +87,8 @@ def create_coffee_transaction(purchaser_id: int, purchases: list[dict]):
     total_amount = Decimal('0.00')
 
     for item in purchases:
-        total_amount += product_map[item['product_id']].product_price
+        price = Decimal(product_map[item['product_id']].product_price)
+        total_amount += taxed(price)
 
     ## populate base fields in transaction summary
     summary = CoffeeTransactionSummary.objects.create(
@@ -95,12 +101,14 @@ def create_coffee_transaction(purchaser_id: int, purchases: list[dict]):
     for item in purchases:
         product = product_map[item['product_id']]
         debtor = EmployeeDim.objects.get(employee_id=item['debtor_id'])
+        price = Decimal(product_map[item['product_id']].product_price)
+        tax_price = taxed(price)
 
         CoffeeTransactionDetail.objects.create(
             transaction=summary,
             product=product,
             product_name=product.product_name,
-            product_price=product.product_price,
+            product_price=tax_price,
             purchaser=purchaser,
             debtor=debtor,
             transaction_date=transaction_date

@@ -65,6 +65,10 @@ export default {
       this.products = res.data;
     },
     async deleteEmployee(employeeId) {
+      if (employeeId === null) {
+        this.employees = this.employees.filter(emp => emp.employee_id !== employeeId);
+
+      } else {
       axios.post('http://localhost:8000/api/delete_employee/', {
         employee_id: employeeId
       })
@@ -75,7 +79,7 @@ export default {
       })
       .catch(error => {
         console.error('Error deleting employee:', error.response ? error.response.data : error.message);
-      });
+      })};
     },
     async addNewEmployee() {
         const newEmp = {

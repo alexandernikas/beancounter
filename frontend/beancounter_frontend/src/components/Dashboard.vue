@@ -18,7 +18,13 @@
   
             <!-- Transaction Table -->
         <div class="transaction-list">
-        <h2 class="table-banner">Previous Coffee Runs</h2>
+        <h2 class="table-banner">Previous Coffee Runs  <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search coffee runs..."
+      class="search-box"
+    /></h2>
+      
         <div class="table-container">
             <table class="transaction-table">
             <thead>
@@ -29,7 +35,7 @@
                 </tr>
             </thead>
             <tbody class="table-body-scroll">
-                <tr v-for="txn in transactions" :key="txn.transaction_id" @click="goToTransaction(txn.transaction_id)">
+                <tr v-for="txn in filteredTransactions" :key="txn.transaction_id" @click="goToTransaction(txn.transaction_id)">
                 <td>{{ txn.transaction_date }}</td>
                 <td>{{ txn.purchaser_name }}</td>
                 <td>${{ txn.transaction_amount }}</td>
@@ -58,8 +64,16 @@
         transactions: [],
         suggestedBuyer: null,
         employeeOrders: [],
+        searchQuery:''
       };
     },
+    computed: {
+    filteredTransactions() {
+      return this.transactions.filter(transaction =>
+        transaction.purchaser_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
     methods: {
       async fetchTransactions() {
         try {
@@ -213,4 +227,13 @@
     vertical-align: middle;
     margin: 0 5px;
   }
+
+  .search-box {
+  background-color: #545454;
+    color: white;
+    border: 1px solid #555;
+    padding: 6px;
+    margin-left:20px;
+    border-radius: 4px;
+}
   </style>
