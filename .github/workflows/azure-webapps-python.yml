@@ -3,7 +3,7 @@ name: Deploy Django to Azure Web App
 on:
   push:
     branches:
-      - main
+      - dev-deployment
 
 jobs:
   deploy:
