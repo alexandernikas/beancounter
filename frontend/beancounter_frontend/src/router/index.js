@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../components/Dashboard.vue';
 import ManageTeam from '../components/ManageTeam.vue';
 import TransactionDetail from '../components/TransactionDetail.vue';
+import ManageCoffeeMenu from '../components/ManageCoffeeMenu.vue'; 
+
 
 
 const routes = [
@@ -17,6 +19,11 @@ const routes = [
     path: '/transaction/:transaction_id',
     name: 'TransactionDetail',
     component:TransactionDetail
+  },
+  {
+    path: '/manage-coffee-menu',
+    name: 'ManageCoffeeMenu',
+    component: ManageCoffeeMenu
   }
     
 ];
