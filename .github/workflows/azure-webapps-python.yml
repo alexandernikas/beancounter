@@ -1,4 +1,4 @@
-name: Deploy Django to Azure Web App
+name: Deploy Django App to Azure Web App
 
 on:
   push:
@@ -6,68 +6,57 @@ on:
       - dev-deployment
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     env:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
-      ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
       ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-      # Add any other required secrets here
+      ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.13
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
 
-    - name: Install dependencies
-      working-directory: ./beancounter/backend
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Debug environment variables
-      run: |
-        echo "DB_NAME=$DB_NAME"
-        echo "DB_USER=$DB_USER"
-        echo "DB_PASSWORD=$DB_PASSWORD"
-        echo "DB_HOST=$DB_HOST"
-        echo "DB_PORT=$DB_PORT"
-        echo "ALLOWED_HOSTS=$ALLOWED_HOSTS"
-        echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS"
-        ping -c 3 $DB_HOST || echo "Cannot resolve DB_HOST"
+      - name: Debug environment variables
+        run: |
+          echo "DB_NAME=$DB_NAME"
+          echo "DB_USER=$DB_USER"
+          echo "DB_PASSWORD=$DB_PASSWORD"
+          echo "DB_HOST=$DB_HOST"
+          echo "DB_PORT=$DB_PORT"
+          echo "ALLOWED_HOSTS=$ALLOWED_HOSTS"
+          echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS"
+          ping -c 3 $DB_HOST || echo "Cannot resolve DB_HOST"
 
-    - name: Run migrations
-      working-directory: ./beancounter/backend
-      env:
-        DB_NAME: ${{ secrets.DB_NAME }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-        ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
-        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-      run: |
-        python manage.py migrate --noinput
+      - name: Run migrations
+        working-directory: ./backend
+        run: |
+          python manage.py migrate
 
-    - name: Collect static files
-      working-directory: ./beancounter/backend
-      run: |
-        python manage.py collectstatic --noinput
+      - name: Collect static files
+        working-directory: ./backend
+        run: |
+          python manage.py collectstatic --noinput
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: bean-counter-epfhg2h9gjeyedcs
-        slot-name: production
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ./beancounter/backend
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+          package: ./backend
