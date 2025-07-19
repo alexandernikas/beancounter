@@ -137,7 +137,4 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Allow Vue dev server
-CORS_ALLOWED_ORIGINS = [
-    os.environ.get('ALLOWED_ORIGINS')
-]
-
+CORS_ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '').split(',')
