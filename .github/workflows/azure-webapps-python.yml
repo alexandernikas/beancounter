@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev-deployment
-      
 
 env:
   AZURE_WEBAPP_NAME: bean-counter
