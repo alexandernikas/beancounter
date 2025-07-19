@@ -21,7 +21,7 @@
         <h2 class="table-banner">Previous Coffee Runs  <input
       v-model="searchQuery"
       type="text"
-      placeholder="Search coffee runs..."
+      placeholder="Search coffee buyers..."
       class="search-box"
     /></h2>
       

@@ -155,7 +155,7 @@ async submitAll() {
   
   <style scoped>
   .sidebar {
-    width: 450px;
+    width: 475px;
     background-color: #2c2c2c;
     padding: 0;
     border-right: 1px solid #444;
