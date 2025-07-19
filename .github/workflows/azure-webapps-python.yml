@@ -1,5 +1,6 @@
 name: Deploy Django Backend to Azure Web App
 
+
 on:
   push:
     branches:
