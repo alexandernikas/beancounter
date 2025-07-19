@@ -80,7 +80,7 @@
             console.log('Submitting absences:', absentIds);
 
         try {
-            const response = await fetch('http://localhost:8000/api/update_absences/', {
+            const response = await fetch(`${process.env.VUE_APP_API_URL}/api/update_absences/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,7 +121,7 @@
         console.log(payload);
 
         try {
-            const response = await fetch('http://localhost:8000/api/create_transaction/', {
+            const response = await fetch(`${process.env.VUE_APP_API_URL}/api/create_transaction/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

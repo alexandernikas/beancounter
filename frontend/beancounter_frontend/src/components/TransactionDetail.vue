@@ -72,7 +72,7 @@ export default {
     async fetchTransactionDetail() {
       const transaction_id = this.$route.params.transaction_id;
       try {
-        const res = await axios.get(`http://localhost:8000/api/details/${transaction_id}/`);
+        const res = await axios.get(`${process.env.VUE_APP_API_URL}/api/details/${transaction_id}/`);
         this.transactionDetail = res.data;
         console.log("detail:", this.transactionDetail);
       } catch (err) {
@@ -82,7 +82,7 @@ export default {
     async rollbackTransaction() {
       const transaction_id = this.$route.params.transaction_id;
       try {
-        axios.post(`http://localhost:8000/api/rollback_transaction/${transaction_id}/`)
+        axios.post(`${process.env.VUE_APP_API_URL}/api/rollback_transaction/${transaction_id}/`)
           .then(response => {
             console.log('Transaction rolled back:', response.data);
             this.$router.push('/home'); // redirect after rollback

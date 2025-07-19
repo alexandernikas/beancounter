@@ -57,11 +57,11 @@ export default {
   },
   methods: {
     async fetchEmployees() {
-      const res = await axios.get('http://localhost:8000/api/employees/');
+      const res = await axios.get(`${process.env.VUE_APP_API_URL}/api/employees/`);
       this.employees = res.data;
     },
     async fetchProducts() {
-      const res = await axios.get('http://localhost:8000/api/products/');
+      const res = await axios.get(`${process.env.VUE_APP_API_URL}/api/products/`);
       this.products = res.data;
     },
     async deleteEmployee(employeeId) {
@@ -69,7 +69,7 @@ export default {
         this.employees = this.employees.filter(emp => emp.employee_id !== employeeId);
 
       } else {
-      axios.post('http://localhost:8000/api/delete_employee/', {
+      axios.post(`${process.env.VUE_APP_API_URL}/api/delete_employee/`, {
         employee_id: employeeId
       })
       .then(response => {
@@ -96,7 +96,7 @@ export default {
     async saveChanges() {
 
         try {
-            const res = await axios.post('http://localhost:8000/api/save_bulk_employees/', {
+            const res = await axios.post(`${process.env.VUE_APP_API_URL}/api/save_bulk_employees/`, {
             employees: this.employees
             });
             alert('Changes saved');

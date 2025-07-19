@@ -78,7 +78,7 @@
     methods: {
       async fetchProducts() {
         try {
-          const res = await axios.get('http://localhost:8000/api/products/');
+          const res = await axios.get(`${process.env.VUE_APP_API_URL}/api/products/`);
           this.products = res.data;
           console.log("detail:", this.products);
         } catch (err) {
@@ -88,7 +88,7 @@
       async updatePrices() {
         console.log("Updating Prices");
         try {
-          const response = await axios.post("http://localhost:8000/api/update_prices/");
+          const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/update_prices/`);
           const data = response.data;
 
           if (data.status === "success") {

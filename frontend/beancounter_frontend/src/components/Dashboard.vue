@@ -71,13 +71,14 @@
     filteredTransactions() {
       return this.transactions.filter(transaction =>
         transaction.purchaser_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+
       );
     },
   },
     methods: {
       async fetchTransactions() {
         try {
-          const response = await axios.get('http://localhost:8000/api/summaries/');
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/summaries/`);
           this.transactions = response.data;
           console.log('fetched transactions', this.transactions);
 
@@ -88,7 +89,7 @@
   
       async fetchSuggestedBuyer() {
         try {
-          const response = await axios.get('http://localhost:8000/api/suggest_buyer/');
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/suggest_buyer/`);
           this.suggestedBuyer = response.data.name;
         } catch (error) {
           console.error("Error fetching suggested buyer:", error);
@@ -97,7 +98,7 @@
   
       async fetchEmployeeOrders() {
         try {
-          const response = await axios.get('http://localhost:8000/api/employees/');
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/employees/`);
           this.employeeOrders = response.data;
         } catch (error) {
           console.error("Error fetching employee orders:", error);
