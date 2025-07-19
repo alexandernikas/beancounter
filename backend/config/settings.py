@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from django.db import connection
+with connection.cursor() as cursor:
+    cursor.execute("CREATE SCHEMA IF NOT EXISTS bean_counter;")
+    print("Schema created!")
 
 from pathlib import Path
 from decouple import config, Csv
@@ -86,7 +90,7 @@ DATABASES = {
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
         'OPTIONS': {
-            'options': '-c search_path=bean_counter',
+            'options': '-c search_path=public,bean_counter',
 }
     }
 }
