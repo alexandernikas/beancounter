@@ -115,3 +115,13 @@ class RollbackTransactionView(APIView):
             return Response({'error': str(ve)}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+## triggers webscraper to check for menu price updates and apply as necessary
+class UpdatePricesView(APIView):
+    def post(self, request):
+        try:
+            result = scrape_vento_menu()
+
+            return Response({"status": "success", "result": result}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"status": "error", "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -130,12 +130,7 @@
     border-radius: 10px;
     margin-bottom: 20px;
   }
-  
-  .suggestion-note {
-    font-size: 0.9em;
-    color: #aaa;
-    font-style: italic;
-  }
+
   
   /* Transaction table */
   .transaction-list {

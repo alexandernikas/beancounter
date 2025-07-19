@@ -3,13 +3,9 @@
       <main class="main-content">
         <span class="exit-btn"
         @click="$router.push('/home')">✕</span>
-        <h2>Order Details</h2>
-  
-        <!-- Card Wrapper -->
-        <div class="mgmt-card relative">
-          <!-- Exit Button -->
-  
-  
+        <h2>Coffee Menu</h2>
+                <div class="mgmt-card relative">
+
           <!-- Content -->
           <div v-if="products">
             <!-- product table -->
@@ -32,8 +28,11 @@
                   </tbody>
                 </table>
               </div>
+
               <div class="sidebar-buttons">
             <button @click="updatePrices" class="style-btn">Update Prices</button>
+            <span class="suggestion-note">Prices updated from url.com</span>
+
             </div>
             </div>
           </div>
@@ -70,8 +69,14 @@
         }
       },
       async updatePrices() {
-        console.log("Updating Prices")
-    }
+        console.log("Updating Prices");
+        try {
+          const response = await axios.post("http://localhost:8000/api/update_prices/");
+          console.log("Prices updated:", response.data);
+        } catch (error) {
+          console.error("Error updating prices:", error);
+        }
+      }
   
     }
   };

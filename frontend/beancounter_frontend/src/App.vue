@@ -93,4 +93,9 @@ nav a.router-link-exact-active {
   color: rgb(201, 0, 0); 
 }
   
+.suggestion-note {
+    font-size: 0.9em;
+    color: #aaa;
+    font-style: italic;
+  }
 </style>

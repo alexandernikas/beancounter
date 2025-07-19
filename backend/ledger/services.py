@@ -8,6 +8,14 @@ from .models import (
 from django.utils import timezone
 from decimal import Decimal
 from django.db import transaction, models
+from .UserAgent import NewUserAgent
+from bs4 import BeautifulSoup
+import json
+from .UserAgent import NewUserAgent
+from datetime import date
+import re
+import requests
+
 
 def update_employee_absences(absent_employee_ids):
     print(absent_employee_ids)
@@ -190,3 +198,52 @@ def rollback_transaction(transaction_id):
         raise ValueError("One or more involved employees no longer exist")
     except Exception as e:
         raise e
+
+def get_menu_html(menu_url):
+        UserAgent = NewUserAgent()
+        html_raw = None
+        response = UserAgent.connect_url(menu_url)
+        if response.status_code == 200:
+            html_raw = BeautifulSoup(response.content, 'html.parser')
+            html_raw = str(html_raw)
+        else:
+            print(f"Failed to retrieve the page. Status code: {response.status_code}")
+
+def scrape_vento_menu():
+    url = "https://ventocoffee.com/pages/print-menu"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    ## find all parent divs that contain a full item block
+    blocks = soup.select("span.item-name")
+    menu_items = []
+    for name_tag in blocks:
+        name = name_tag.contents[0].strip() if name_tag.contents else None
+
+        parent = name_tag.find_parent("div")
+        if not parent:
+            continue
+
+        # The price/size block is likely a sibling after the name/description div
+        sibling = parent.find_next_sibling("div", class_="table-drinks")
+        if not sibling:
+            continue
+
+        sizes = [s.text.strip() for s in sibling.select("div.table-size span.item-size")]
+        prices = [p.text.strip() for p in sibling.select("div.table-price span.item-price")]
+
+        # Match size to price
+        size_price_map = list(zip(sizes, prices))
+
+
+        menu_items.append({
+            "name": name,
+            "sizes_prices": size_price_map,
+        })
+    print(menu_items)
+    return menu_items
+
+
