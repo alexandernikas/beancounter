@@ -285,5 +285,7 @@ def sync_scraped_products(scraped_data):
 
     return { "updated" : updated, "created": created }
 
+def flush_products():
+    CoffeeProductDim.objects.all().delete()
 
 
