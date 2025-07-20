@@ -120,7 +120,6 @@ class RollbackTransactionView(APIView):
 class UpdatePricesView(APIView):
     def post(self, request):
         try:
-            flush_products()
             menu_data = scrape_vento_menu()
             ## result formatted as { "updated": 5, "created": 2 }
             result = sync_scraped_products(menu_data)
