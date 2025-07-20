@@ -40,26 +40,3 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./backend
-          
-      - name: Configure Azure App Settings
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.30.0
-          inlineScript: |
-            az webapp config appsettings set \
-              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-              --name ${{ secrets.AZURE_WEBAPP_NAME }} \
-              --settings \
-                DB_NAME="${{ secrets.DB_NAME }}" \
-                DB_USER="${{ secrets.DB_USER }}" \
-                DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-                DB_HOST="${{ secrets.DB_HOST }}" \
-                DB_PORT="${{ secrets.DB_PORT }}" \
-                ALLOWED_ORIGINS="${{ secrets.ALLOWED_ORIGINS }}" \
-                ALLOWED_HOSTS="${{ secrets.ALLOWED_HOSTS }}" \
-                SCM_DO_BUILD_DURING_DEPLOYMENT=1
-                
-            az webapp config set \
-              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-              --name ${{ secrets.AZURE_WEBAPP_NAME }} \
-              --startup-file "startup.sh"
