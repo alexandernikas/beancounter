@@ -36,7 +36,10 @@ def update_employee_absences(absent_employee_ids):
 def get_employee_with_lowest_balance():
     lowest_balance_record = (
         CoffeeGeneralLedgerBalances.objects
-        .filter(employee__current_employee=True)
+        .filter(
+            employee__current_employee=True,
+            employee__is_absent=False  
+        )
         .select_related('employee')
         .order_by('balance')
         .first()
