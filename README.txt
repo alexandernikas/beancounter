@@ -1,4 +1,5 @@
 ## INSTRUCTIONS TO RUN LOCALLY
+Requirements: Python==3.13, Node.js==22.15.0, PostgreSQL==15.12
 
     ## RUN DJANGO BACKEND
     1. Download files from branch beancounter/localhost-bundle or main
@@ -6,18 +7,18 @@
     3. Create a .env file in /backend following the provided sample
     4. Navigate to the /backend folder
     5. Create a venv
-        5.1. >>>python -m venv env
+        5.1. python -m venv env
     6. Activate venv (source env/bin/activate on mac/linux or env\Scripts\activate on Windows)
     7. Install requirements.txt
-        7.1. >>>python -m pip install -r requirements.txt
+        7.1. python -m pip install -r requirements.txt
     8. Create BEAN_COUNTER schema or select a different schema in settings.py
         8.1. sql CREATE SCHEMA IF NOT EXISTS BEAN_COUNTER AUTHORIZATION <username>;
     9. Run migrations
-        9.1. >>>python manage.py makemigrations
-        9.2. >>>python manage.py migrate
+        9.1. python manage.py makemigrations
+        9.2. python manage.py migrate
     10. Run development server
-        10.1. >>>python manage.py runserver
-    
+        10.1. python manage.py runserver
+
     ## RUN VUE FRONTEND
     11. Navigate to beancounter_frontend
     12. Create a .env file in /beancounter_frontend following the provided sample
