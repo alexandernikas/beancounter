@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-from django.db import models
-
 class EmployeeDim(models.Model):
     employee_id = models.AutoField(primary_key=True)
     employee_name = models.CharField(max_length=100)
