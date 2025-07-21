@@ -28,10 +28,13 @@ Requirements: Python==3.13, Node.js==22.15.0, PostgreSQL==15.12
 
 ## USER INSTRUCTIONS
 1. In the web client, navigate to the "Manage Coffee Menu" button on the sidebar
-2. On the coffee menu page, hit "Update Prices". This will retrieve the coffee menu from a local Broomfield coffee shop (robots.txt was reviewed to ensure compliance with terms of services)
-3. In the web client, navigate to the "Manage Team Members" button on the sidebar and add team members. Hit "Save Changes" to post additions/updates to database.
+2. On the coffee menu page, hit "Update Prices". This will retrieve the coffee menu from a local Broomfield coffee 
+   shop (robots.txt was reviewed to ensure compliance with terms of services)
+3. In the web client, navigate to the "Manage Team Members" button on the sidebar and add team members. Hit "Save Changes" 
+   to post additions/updates to database.
 4. To submit a coffee run, select the purchaser in the top right dropdown and hit "Submit".
-5. To account for absences, select the "Out of Office" checkbox on the left hand table. OOO members will be excluded from the transaction and suggested buyer.
+5. To account for absences, select the "Out of Office" checkbox on the left hand table. OOO members will be excluded 
+   from the transaction and suggested buyer.
 6. To review a transaction, click the transaction on the "Recent Coffee Runs" table
 8. To roll back a transaction, hit "Delete Transaction" on the transaction-detail page.
 
@@ -41,6 +44,6 @@ The app is hosted on Azure here -> https://polite-sky-0deb0790f.2.azurestaticapp
 ## CORE ASSUMPTIONS
 1. Team members' orders are predictable and consistent
 2. The team always visits the same coffee shop
-3. Team members will not settle balances individually,
+3. Team members will not reimburse one another individually,
    and instead rely solely on a round-robin style ordering system 
    to ensure an equitable purchasing cadence
