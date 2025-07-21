@@ -28,7 +28,7 @@
 ## USER INSTRUCTIONS
 1. In the web client, navigate to the "Manage Coffee Menu" button on the sidebar
 2. On the coffee menu page, hit "Update Prices". This will retrieve the coffee menu from a local Broomfield coffee shop (robots.txt was reviewed to ensure compliance with terms of services)
-3. In the web client, navigate to the "Manage Team Members" button on the sidebar and add team members
+3. In the web client, navigate to the "Manage Team Members" button on the sidebar and add team members. Hit "Save Changes" to post additions/updates to database.
 4. To submit a coffee run, select the purchaser in the top right dropdown and hit "Submit".
 5. To account for absences, select the "Out of Office" checkbox on the left hand table. OOO members will be excluded from the transaction and suggested buyer.
 6. To review a transaction, click the transaction on the "Recent Coffee Runs" table
